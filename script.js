@@ -90,6 +90,7 @@ const slideWidth = 20; // Adjust based on the width of each slide
 let intervalId;
 
 // Function to move to the next slide
+// Function to move to the next slide
 function moveToNextSlide() {
   totalSlides = slideContainer.children.length;
   if (currentIndex <= totalSlides - slidesToShow) {
@@ -97,6 +98,10 @@ function moveToNextSlide() {
     slideContainer.style.transform = `translateX(-${
       currentIndex * slideWidth
     }%)`;
+
+    // Calculate the number of cards shown on the screen
+    const cardsShown = Math.min(slidesToShow, totalSlides - currentIndex);
+    console.log(`Number of cards shown: ${cardsShown}`);
   } else {
     currentIndex = 0;
     slideContainer.style.transform = `translateX(0)`;
@@ -110,15 +115,17 @@ nextBtn.addEventListener("click", () => {
   intervalId = setInterval(moveToNextSlide, 2000); // Set new interval
 });
 
-// Event listener for previous button
-prevBtn.addEventListener("click", () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    slideContainer.style.transform = `translateX(-${
-      currentIndex * slideWidth
-    }%)`;
-  }
-});
+// Function to update slidesToShow based on screen size
+function updateSlidesToShow() {
+  // Update slidesToShow based on screen width
+  slidesToShow = window.innerWidth >= 768 ? 6 : 1;
+}
+
+// Update slidesToShow initially
+updateSlidesToShow();
+
+// Listen for window resize event to update slidesToShow
+window.addEventListener("resize", updateSlidesToShow);
 
 // Initially display all products
 displayAllProducts();
